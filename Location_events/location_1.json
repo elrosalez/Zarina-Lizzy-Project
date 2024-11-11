@@ -1,0 +1,72 @@
+[
+  {
+    "primary_attribute": "Agility",
+    "secondary_attribute": "Teamwork",
+    "prompt_text": "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n        NARROW LAVA BRIDGE       \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n     |   |     |   |      |    |    \n     |   |_____|   |______|____|    \n~~~~~~  ~~~~~~~~~  ~~~~~~~~~~ ~~~~~~\n       Molten Lava Flow Below     \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\"Will you attempt to cross the bridge?\"",
+    "pass": {
+      "message": "With perfect timing and coordination, you crossed the bridge safely. You can move on!"
+    },
+    "fail": {
+      "message": "You misjudged the jump and fell into the lava. You need to regroup and try again."
+    },
+    "partial_pass": {
+      "message": "You made it halfway but slipped! You'll need to regain your balance to continue."
+    }
+  },
+  {
+    "primary_attribute": "Intelligence",
+    "secondary_attribute": "Creativity",
+    "prompt_text": "*****************************************\n       CHAMBER OF GLIMMERING ICE\n*****************************************\n        *  *     *       *    *\n     *        *      *    *       *\n      ~~~~~ Ice Crystals Reflect Light ~~~~~\n    *      *       *      *     *   *\n         *       *       *    *\n\n\"The chamber glimmers with icy light. What will you do?\"",
+    "pass": {
+      "message": "Using your wits, you created a path through the ice, revealing a hidden exit. You may proceed!"
+    },
+    "fail": {
+      "message": "You couldn't find a way through the crystals. You'll need to search for another route."
+    },
+    "partial_pass": {
+      "message": "You managed to clear a few crystals but not enough to escape. You’ll need to keep trying."
+    }
+  },
+  {
+    "primary_attribute": "Intelligence",
+    "secondary_attribute": "Courage",
+    "prompt_text": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n      THE MAJESTIC WATERFALL    \n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n         ~~~~~~       ~~~~~~\n        ~  Wisdom Awaits  ~\n       ~      ~~~~        ~\n          ~~~~~      ~~~~~~\n        ~~~~~~~~~ ~~~~~~~~~~\n           Waters of Insight\n\n\"The waterfall thunders before you. Do you approach?\"",
+    "pass": {
+      "message": "You approached bravely and listened to the whispers of the water. You gained valuable insight for your journey."
+    },
+    "fail": {
+      "message": "You were too afraid to approach the waterfall. The wisdom remains out of reach."
+    },
+    "partial_pass": {
+      "message": "You listened from a distance and learned a hint, but the full wisdom eludes you."
+    }
+  },
+  {
+    "primary_attribute": "Strength",
+    "secondary_attribute": "Intelligence",
+    "prompt_text": "###############################\n          STONE GUARDIAN     \n###############################\n       _____       _____\n      /     \\     /     \\\n     | (o) (o) | |       |\n     |    #    | |   O   |\n       \\_____/     \\_____/\n\n\"The guardian stands tall, testing your strength and smarts. How will you proceed?\"",
+    "pass": {
+      "message": "You outsmarted and outmuscled the guardian. You may pass without further hindrance!"
+    },
+    "fail": {
+      "message": "The guardian bested you in both tests. You'll need to find another way around."
+    },
+    "partial_pass": {
+      "message": "You managed to impress the guardian with one test, but not the other. The path remains partially blocked."
+    }
+  },
+  {
+    "primary_attribute": "Intelligence",
+    "secondary_attribute": "Teamwork",
+    "prompt_text": "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n         MYSTIC CASTLE      \n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    _______         _______\n   /      \\       /       \\\n  |  FIRE  |     |  WATER  |\n   \\_______/       \\_______/\n\n\"Ahead lies the massive castle puzzle. Fire and water are needed. How will you solve it?\"",
+    "pass": {
+      "message": "Working together, you aligned the elements perfectly. The puzzle clicks open, and the way ahead is clear!"
+    },
+    "fail": {
+      "message": "You struggled to collaborate and the puzzle remains unsolved. You’ll need to rethink your strategy."
+    },
+    "partial_pass": {
+      "message": "You managed to solve part of the puzzle, but the solution remains incomplete. You’ll have to keep trying together."
+    }
+  }
+]

@@ -1,7 +1,6 @@
 import json
-import sys
 import random
-from typing import List, Optional 
+from typing import List 
 from enum import Enum
 
 class EventStatus(Enum):
