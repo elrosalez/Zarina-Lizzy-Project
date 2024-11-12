@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adventure Game with Character Graphics</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Adventure Game</h1>
+  <div id="character-container"></div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adventure Game</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Choose Your Character</h1>
+  <div id="character-container"></div>
+  <script src="script.js"></script>
+</body>
+</html>

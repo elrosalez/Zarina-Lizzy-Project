@@ -35,6 +35,7 @@ class Character:
     def __str__(self):
         return f"Character: {self.name}, Strength: {self.strength}, Intelligence: {self.intelligence}"
 
+
     def get_stats(self):
         return [self.strength, self.intelligence]  # Extend this list if there are more stats
 
@@ -269,3 +270,5 @@ if __name__ == '__main__':
 
 # if __name__ == '__main__':
 #     unittest.main()
+
+

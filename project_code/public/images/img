@@ -1,0 +1,10 @@
+<div class="character">
+  <img src="images/underwater_hero.png" alt="Underwater Hero" class="character-image">
+  <h2>Underwater Hero</h2>
+  <ul>
+      <li>Strength: 20</li>
+      <li>Intelligence: 15</li>
+  </ul>
+  <button onclick="increaseStat('Underwater Hero', 'strength')">Increase Strength</button>
+  <button onclick="increaseStat('Underwater Hero', 'intelligence')">Increase Intelligence</button>
+</div>
