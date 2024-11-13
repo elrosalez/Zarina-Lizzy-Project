@@ -7,11 +7,14 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Adventure Game</h1>
-  <div id="character-container"></div>
-  <script src="script.js"></script>
-</body>
-</html>
+
+    <h1>Adventure Game</h1>
+    <div style="display: inline-block;">
+      <img src="{{ url_for('static', filename='images/Watergirl.webp') }}" alt="watergirl" style="width: 150px; height: auto;">
+      <img src="{{ url_for('static', filename='images/Fireboy.webp') }}" alt="fireboy" style="width: 140px; height: auto;">
+      <img src="{{ url_for('static', filename='images/Aquaman.png') }}" alt="aquaman" style="width: 140px; height: auto;">
+    </div>
+
 
 
 <!DOCTYPE html>
