@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adventure Game with Character Graphics</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireboy & Watergirl Game</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Add your CSS file -->
 </head>
 <body>
+    <h1>Welcome to Fireboy & Watergirl Challenge Game</h1>
+    <div id="character-container">
+        <!-- Characters will be dynamically loaded here -->
+    </div>
 
-    <h1>Adventure Game</h1>
-    <div style="display: inline-block;">
-      <div style="display: flex; align-items: flex-end; gap: 10px;">
-          <img src="{{ url_for('static', filename='images/Watergirl.webp') }}" alt="watergirl" style="width: 150px; height: 200px;">
-          <img src="{{ url_for('static', filename='images/Fireboy.webp') }}" alt="fireboy" style="width: 140px; height: 200px;">
-          <img src="{{ url_for('static', filename='images/Aquaman.png') }}" alt="aquaman" style="width: 120px; height: 200px;">
-          <img src="{{ url_for('static', filename='images/lava woman.png') }}" alt="lava woman" style="width: 160px; height: 220px;">
-      </div>
+    <div id="challenge-container">
+        <h2>Challenge</h2>
+        <p id="challenge-text">Select a character to begin.</p>
+        <button id="challenge-button" disabled>Attempt Challenge</button>
+        <p id="result-message"></p>
+    </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adventure Game</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h1>Choose Your Character</h1>
-  <div id="character-container"></div>
-  <script src="script.js"></script>
+    <script src="script.js"></script> <!-- Include the JS file -->
 </body>
 </html>
+<button id="challenge-button" onclick="attemptChallenge()" disabled>Attempt Challenge</button>
+

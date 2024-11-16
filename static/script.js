@@ -1,4 +1,5 @@
-// public/script.js - Frontend JavaScript with character images
+let selectedCharacter = null;
+
 async function fetchCharacters() {
     const response = await fetch('/api/characters');
     const characters = await response.json();
@@ -7,87 +8,56 @@ async function fetchCharacters() {
 
 function displayCharacters(characters) {
     const container = document.getElementById('character-container');
-    container.innerHTML = ""; // Clear existing content
+    container.innerHTML = "";  // Clear existing content
 
     characters.forEach(character => {
         const characterDiv = document.createElement('div');
         characterDiv.className = 'character';
 
-        // Image selection based on character name
-        const imagePath = getCharacterImage(character.name);
+        const imagePath = `static/images/${character.image}`;  // Assuming images are in the static/images folder
 
         characterDiv.innerHTML = `
             <img src="${imagePath}" alt="${character.name}" class="character-image">
             <h2>${character.name}</h2>
             <ul>
-                ${character.stats.map(stat => `<li>${stat.name}: ${stat.value}</li>`).join('')}
+                ${Object.entries(character.attributes).map(([attr, value]) => `
+                    <li>${attr}: ${value}</li>
+                `).join('')}
             </ul>
-            <button onclick="increaseStat('${character.name}', 'strength')">Increase Strength</button>
-            <button onclick="increaseStat('${character.name}', 'intelligence')">Increase Intelligence</button>
+            <button onclick="selectCharacter('${character.name}')">Select Character</button>
         `;
         container.appendChild(characterDiv);
     });
 }
 
-function getCharacterImage(characterName) {
-    const images = {
-        "Fireboy": "images/fireboy.png",
-        "Watergirl": "images/watergirl.png",
-        "Aquaman": "images/aquaman.png",
-        "Lavawomen": "images/lavawomen.png"
-    };
-    return images[characterName] || "images/default.png"; // Fallback image
+function selectCharacter(characterName) {
+    selectedCharacter = characterName;
+    // Update the challenge text to reflect character selection
+    document.getElementById('challenge-text').textContent = `You have selected ${characterName}. Ready for the challenge?`;
+    // Enable the "Attempt Challenge" button
+    document.getElementById('challenge-button').disabled = false;
+    
 }
 
-async function increaseStat(characterName, statName) {
-    const response = await fetch(`/api/character/${characterName}/increase/${statName}`);
-    const data = await response.json();
-    console.log(data.message);
-    fetchCharacters(); // Refresh character display
-}
-
-// Initial load
-fetchCharacters();
-
-function getCharacterImage(characterName) {
-    const images = {
-        "Underwater Hero": "images/underwater_hero.png",
-        "Fireboy": "images/fireboy.png",
-        "Watergirl": "images/watergirl.png",
-        "Aquaman": "images/aquaman.png",
-        "Lavawomen": "images/lavawomen.png"
-    };
-    return images[characterName] || "images/default.png";
-
-
-    // Public/script.js
-
-    // Mock data for characters with image paths (replace with backend API fetch in production)
-    const characters = [
-        { name: "Fireboy", imagePath: "images/fireboy.png" },
-        { name: "Watergirl", imagePath: "images/watergirl.png" },
-        { name: "Aquaman", imagePath: "images/aquaman.png" },
-        { name: "Lavawomen", imagePath: "images/lavawomen.png" }
-    ];
-
-    function displayCharacters(characters) {
-        const container = document.getElementById('character-container');
-        container.innerHTML = ""; // Clear existing content
-
-        characters.forEach(character => {
-            const characterDiv = document.createElement('div');
-            characterDiv.className = 'character';
-
-            // Display character name, image, and basic information
-            characterDiv.innerHTML = `
-                <img src="${character.imagePath}" alt="${character.name}" class="character-image">
-                <h2>${character.name}</h2>
-                <p>Strength: ${character.strength || 10}</p>
-                <p>Intelligence: ${character.intelligence || 10}</p>
-            `;
-            container.appendChild(characterDiv);
-        });
+async function attemptChallenge() {
+    if (!selectedCharacter) {
+        alert("Please select a character first!");
+        return;
     }
 
-    // Load characters on page load
-    displayCharacters(characters);
+    // Challenge ID is 0 (Narrow Lava Bridge) for simplicity, you can make this dynamic later
+    const challengeId = 0;  // For simplicity, using challenge 0 for now (Narrow Lava Bridge)
+
+    // Make a POST request to the server to attempt the challenge
+    const response = await fetch(`/api/challenge/${selectedCharacter}/${challengeId}`, {
+        method: 'POST'
+    });
+
+    // Handle the response
+    const data = await response.json();
+    // Show the result message
+    document.getElementById('result-message').textContent = data.message;
+}
+
+// Initial load of characters
+fetchCharacters();
