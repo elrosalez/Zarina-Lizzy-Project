@@ -6,51 +6,52 @@ CORS(app)  # Enable CORS for all routes
 
 # Character Data (with attributes)
 characters = [
-    {
-        "name": "Fireboy",
-        "image": "fireboy.png",
-        "attributes": {
-            "Strength": 12,
-            "Agility": 8,
-            "Intelligence": 7,
-            "Teamwork": 6,
-            "Creativity": 5
+        {
+            "name": "Fireboy",
+            "image": "/static/images/fireboy.png",  # Updated path
+            "attributes": {
+                "Strength": 12,
+                "Agility": 8,
+                "Intelligence": 7,
+                "Teamwork": 6,
+                "Creativity": 5
+            }
+        },
+        {
+            "name": "Watergirl",
+            "image": "/static/images/watergirl.png",  # Updated path
+            "attributes": {
+                "Strength": 7,
+                "Agility": 10,
+                "Intelligence": 9,
+                "Teamwork": 12,
+                "Creativity": 8
+            }
+        },
+        {
+            "name": "Aquaman",
+            "image": "/static/images/aquaman.png",  # Updated path
+            "attributes": {
+                "Strength": 10,
+                "Agility": 9,
+                "Intelligence": 8,
+                "Teamwork": 7,
+                "Creativity": 6
+            }
+        },
+        {
+            "name": "Lavawoman",
+            "image": "/static/images/lavawoman.png",  # Updated path
+            "attributes": {
+                "Strength": 12,
+                "Agility": 6,
+                "Intelligence": 7,
+                "Teamwork": 5,
+                "Creativity": 7
+            }
         }
-    },
-    {
-        "name": "Watergirl",
-        "image": "watergirl.png",
-        "attributes": {
-            "Strength": 7,
-            "Agility": 10,
-            "Intelligence": 9,
-            "Teamwork": 12,
-            "Creativity": 8
-        }
-    },
-    {
-        "name": "Aquaman",
-        "image": "aquaman.png",
-        "attributes": {
-            "Strength": 10,
-            "Agility": 9,
-            "Intelligence": 8,
-            "Teamwork": 7,
-            "Creativity": 6
-        }
-    },
-    {
-        "name": "Lavawoman",
-        "image": "lavawoman.png",
-        "attributes": {
-            "Strength": 12,
-            "Agility": 6,
-            "Intelligence": 7,
-            "Teamwork": 5,
-            "Creativity": 7
-        }
-    }
-]
+    ]
+
 
 # List of challenges
 challenges = [
@@ -128,3 +129,53 @@ def evaluate_challenge(character_name, challenge_id):
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=80)
+
+
+
+# Flask app (app.py)
+characters = [
+    {
+        "name": "Aquaman",
+        "image": "/static/images/Aquaman.png",
+        "attributes": {
+            "Strength": 10,
+            "Agility": 9,
+            "Intelligence": 8,
+            "Teamwork": 7,
+            "Creativity": 6
+        }
+    },
+    {
+        "name": "Fireboy",
+        "image": "/static/images/Fireboy.webp",
+        "attributes": {
+            "Strength": 12,
+            "Agility": 8,
+            "Intelligence": 7,
+            "Teamwork": 6,
+            "Creativity": 5
+        }
+    },
+    {
+        "name": "Lavawoman",
+        "image": "/static/images/lava woman.png",
+        "attributes": {
+            "Strength": 12,
+            "Agility": 6,
+            "Intelligence": 7,
+            "Teamwork": 5,
+            "Creativity": 7
+        }
+    },
+    {
+        "name": "Watergirl",
+        "image": "/static/images/Watergirl.webp",
+        "attributes": {
+            "Strength": 7,
+            "Agility": 10,
+            "Intelligence": 9,
+            "Teamwork": 12,
+            "Creativity": 8
+        }
+    }
+]

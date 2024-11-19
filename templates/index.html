@@ -1,26 +1,232 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fireboy & Watergirl Game</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Add your CSS file -->
+    <title>Fireboy & Watergirl Challenge Game</title>
+    <style>
+        body {
+            background-color: #87CEEB;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align items at the top */
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-top: 20px;
+        }
+
+        #game-description {
+            margin-top: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            text-align: left;
+        }
+
+        #character-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .character {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 150px; /* Set a consistent width for each character card */
+            text-align: center;
+        }
+
+        .character img {
+            width: 100%; /* Use the full width of the container */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: contain; /* Ensure the whole image is visible without cropping */
+            margin-bottom: 10px;
+        }
+
+        #challenge-container {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+        }
+
+        select {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4682B4;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #5A9BD3;
+        }
+
+        #challenge-details {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Fireboy & Watergirl Challenge Game</h1>
+    <h1><strong>Fireboy & Watergirl Challenge Game</strong></h1>
+
+    <section id="game-description">
+        <h2>Game Overview</h2>
+        <p>
+            Welcome to the <strong>Fireboy & Watergirl Challenge Game</strong>! 
+            In this thrilling adventure, you’ll join forces with Fireboy, Watergirl, Aquaman, and Lavawoman, each with unique abilities. 
+            Together, you'll tackle exciting challenges that test your skill, creativity, and teamwork. 
+            Whether you’re crossing lava bridges, solving icy puzzles, or strategizing your next move, 
+            you’ll experience a dynamic world full of surprises!
+        </p>
+
+        <h3>How to Play:</h3>
+        <ul>
+            <li>Select your favorite character from the dropdown menu.</li>
+            <li>Click the "Attempt Challenge" button to see the assigned challenge.</li>
+            <li>Complete challenges based on your character’s unique abilities!</li>
+        </ul>
+    </section>
+
     <div id="character-container">
         <!-- Characters will be dynamically loaded here -->
     </div>
 
     <div id="challenge-container">
         <h2>Challenge</h2>
-        <p id="challenge-text">Select a character to begin.</p>
-        <button id="challenge-button" disabled>Attempt Challenge</button>
-        <p id="result-message"></p>
+        <label for="character-select">Select a Character:</label>
+        <select id="character-select">
+            <option value="">-- Choose a Character --</option>
+            <!-- Character options will be added here -->
+        </select>
+        <button id="challenge-button" onclick="attemptChallenge()">Attempt Challenge</button>
+        <div id="challenge-details"></div>
     </div>
 
-    <script src="script.js"></script> <!-- Include the JS file -->
+    <script>
+        // Define characters with updated image URLs
+        const characters = [
+            {
+                name: "Fireboy",
+                image: "static/images/Fireboy.webp"  // Fireboy image URL
+            },
+            {
+                name: "Watergirl",
+                image: "static/images/Watergirl.webp"  // Watergirl image URL
+            },
+            {
+                name: "Aquaman",
+                image: "static/images/Aquaman.png"  // Aquaman image URL
+            },
+            {
+                name: "Lavawoman",
+                image: "static/images/lava woman.png"  // Lavawoman image URL
+            }
+        ];
+
+        // Define challenges
+        const challenges = [
+            {
+                name: "Narrow Lava Bridge",
+                primaryAttribute: "Agility",
+                secondaryAttribute: "Teamwork",
+                description: "Cross the narrow bridge over molten lava by using perfect timing and coordination."
+            },
+            {
+                name: "Chamber of Glimmering Ice",
+                primaryAttribute: "Intelligence",
+                secondaryAttribute: "Creativity",
+                description: "Navigate through a frozen chamber, solving puzzles to reveal the exit."
+            },
+            {
+                name: "Raging River Rapids",
+                primaryAttribute: "Strength",
+                secondaryAttribute: "Agility",
+                description: "Conquer a rushing river filled with obstacles by using your strength and quick reflexes."
+            }
+        ];
+
+        function loadCharacters() {
+            const container = document.getElementById('character-container');
+            const dropdown = document.getElementById('character-select');
+
+            characters.forEach(character => {
+                // Add character to the container
+                const characterDiv = document.createElement('div');
+                characterDiv.classList.add('character');
+
+                const img = document.createElement('img');
+                img.src = character.image;
+                img.alt = character.name;
+
+                const name = document.createElement('h3');
+                name.textContent = character.name;
+
+                characterDiv.appendChild(img);
+                characterDiv.appendChild(name);
+                container.appendChild(characterDiv);
+
+                // Add character to the dropdown
+                const option = document.createElement('option');
+                option.value = character.name;
+                option.textContent = character.name;
+                dropdown.appendChild(option);
+            });
+        }
+
+        function attemptChallenge() {
+            const selectedCharacter = document.getElementById('character-select').value;
+            const challengeDetails = document.getElementById('challenge-details');
+
+            if (!selectedCharacter) {
+                challengeDetails.textContent = "Please select a character to view their challenge.";
+                return;
+            }
+
+            // Assign a random challenge for simplicity
+            const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+
+            // Display the challenge
+            challengeDetails.innerHTML = `
+                <h3>${challenge.name}</h3>
+                <p><strong>Primary Attribute:</strong> ${challenge.primaryAttribute}</p>
+                <p><strong>Secondary Attribute:</strong> ${challenge.secondaryAttribute}</p>
+                <p>${challenge.description}</p>
+            `;
+        }
+
+        // Load characters on page load
+        loadCharacters();
+    </script>
 </body>
 </html>
-<button id="challenge-button" onclick="attemptChallenge()" disabled>Attempt Challenge</button>
-

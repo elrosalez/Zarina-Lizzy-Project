@@ -1,6 +1,8 @@
+// Variable to store the selected character
 let selectedCharacter = null;
 
 async function fetchCharacters() {
+    // Fetch the character data from the backend
     const response = await fetch('/api/characters');
     const characters = await response.json();
     displayCharacters(characters);
@@ -8,13 +10,13 @@ async function fetchCharacters() {
 
 function displayCharacters(characters) {
     const container = document.getElementById('character-container');
-    container.innerHTML = "";  // Clear existing content
+    container.innerHTML = "";  // Clear any existing content
 
     characters.forEach(character => {
         const characterDiv = document.createElement('div');
         characterDiv.className = 'character';
 
-        const imagePath = `static/images/${character.image}`;  // Assuming images are in the static/images folder
+        const imagePath = character.image;  // Assuming the image path is already correct
 
         characterDiv.innerHTML = `
             <img src="${imagePath}" alt="${character.name}" class="character-image">
@@ -30,15 +32,16 @@ function displayCharacters(characters) {
     });
 }
 
+// Function to handle character selection
 function selectCharacter(characterName) {
     selectedCharacter = characterName;
     // Update the challenge text to reflect character selection
     document.getElementById('challenge-text').textContent = `You have selected ${characterName}. Ready for the challenge?`;
     // Enable the "Attempt Challenge" button
     document.getElementById('challenge-button').disabled = false;
-    
 }
 
+// Function to attempt the challenge
 async function attemptChallenge() {
     if (!selectedCharacter) {
         alert("Please select a character first!");
@@ -57,12 +60,15 @@ async function attemptChallenge() {
     const data = await response.json();
     // Show the result message
     document.getElementById('result-message').textContent = data.message;
+
+    // Optionally, disable the "Attempt Challenge" button after attempt
+    document.getElementById('challenge-button').disabled = true;
 }
 
-// Initial load of characters
+// Initial load of characters when the page loads
 fetchCharacters();
 
-// Mock data for characters
+// If you have a mock list of characters, you can use this for testing as well
 const characters = [
     { name: 'Fireboy', power: 'Fire' },
     { name: 'Watergirl', power: 'Water' }
@@ -74,8 +80,8 @@ const challengeText = document.getElementById('challenge-text');
 const challengeButton = document.getElementById('challenge-button');
 const resultMessage = document.getElementById('result-message');
 
-// Function to dynamically load characters
-function loadCharacters() {
+// Function to dynamically load characters (optional, if you use mock characters for testing)
+function loadMockCharacters() {
     characters.forEach((character, index) => {
         const button = document.createElement('button');
         button.textContent = character.name;
@@ -85,29 +91,5 @@ function loadCharacters() {
     });
 }
 
-// Function to handle character selection
-let selectedCharacter = null;
-function selectCharacter(index) {
-    selectedCharacter = characters[index];
-    challengeText.textContent = `You selected ${selectedCharacter.name}. Get ready for the challenge!`;
-    challengeButton.disabled = false; // Enable the challenge button
-}
-
-// Function to attempt the challenge
-function attemptChallenge() {
-    if (!selectedCharacter) return;
-
-    // Example challenge logic
-    const success = Math.random() > 0.5; // 50% chance of success
-    resultMessage.textContent = success
-        ? `${selectedCharacter.name} successfully completed the challenge using ${selectedCharacter.power}!`
-        : `${selectedCharacter.name} failed the challenge. Try again!`;
-
-    // Optionally, disable the button again
-    challengeButton.disabled = true;
-    challengeText.textContent = 'Select a character to try again.';
-}
-
 // Initialize the game
-loadCharacters();
-challengeButton.addEventListener('click', attemptChallenge);
+loadMoc
