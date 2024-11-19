@@ -61,3 +61,53 @@ async function attemptChallenge() {
 
 // Initial load of characters
 fetchCharacters();
+
+// Mock data for characters
+const characters = [
+    { name: 'Fireboy', power: 'Fire' },
+    { name: 'Watergirl', power: 'Water' }
+];
+
+// References to HTML elements
+const characterContainer = document.getElementById('character-container');
+const challengeText = document.getElementById('challenge-text');
+const challengeButton = document.getElementById('challenge-button');
+const resultMessage = document.getElementById('result-message');
+
+// Function to dynamically load characters
+function loadCharacters() {
+    characters.forEach((character, index) => {
+        const button = document.createElement('button');
+        button.textContent = character.name;
+        button.classList.add('character-button');
+        button.addEventListener('click', () => selectCharacter(index));
+        characterContainer.appendChild(button);
+    });
+}
+
+// Function to handle character selection
+let selectedCharacter = null;
+function selectCharacter(index) {
+    selectedCharacter = characters[index];
+    challengeText.textContent = `You selected ${selectedCharacter.name}. Get ready for the challenge!`;
+    challengeButton.disabled = false; // Enable the challenge button
+}
+
+// Function to attempt the challenge
+function attemptChallenge() {
+    if (!selectedCharacter) return;
+
+    // Example challenge logic
+    const success = Math.random() > 0.5; // 50% chance of success
+    resultMessage.textContent = success
+        ? `${selectedCharacter.name} successfully completed the challenge using ${selectedCharacter.power}!`
+        : `${selectedCharacter.name} failed the challenge. Try again!`;
+
+    // Optionally, disable the button again
+    challengeButton.disabled = true;
+    challengeText.textContent = 'Select a character to try again.';
+}
+
+// Initialize the game
+loadCharacters();
+challengeButton.addEventListener('click', attemptChallenge);
