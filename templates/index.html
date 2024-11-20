@@ -11,7 +11,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Align items at the top */
+            justify-content: flex-start;
             font-family: Arial, sans-serif;
             color: white;
             text-align: center;
@@ -45,14 +45,14 @@
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 150px; /* Set a consistent width for each character card */
+            width: 150px;
             text-align: center;
         }
 
         .character img {
-            width: 100%; /* Use the full width of the container */
-            height: auto; /* Maintain aspect ratio */
-            object-fit: contain; /* Ensure the whole image is visible without cropping */
+            width: 100%;
+            height: auto;
+            object-fit: contain;
             margin-bottom: 10px;
         }
 
@@ -87,13 +87,26 @@
             background-color: #5A9BD3;
         }
 
-        #challenge-details {
-            margin-top: 20px;
+        #game-screen {
+            display: none;
+            position: relative;
+            padding: 20px;
             background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 80%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .chosen-character {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
@@ -113,8 +126,9 @@
         <h3>How to Play:</h3>
         <ul>
             <li>Select your favorite character from the dropdown menu.</li>
-            <li>Click the "Attempt Challenge" button to see the assigned challenge.</li>
-            <li>Complete challenges based on your character’s unique abilities!</li>
+            <li>Click the "Attempt Challenge" button to open your assigned challenge and start the game.</li>
+            <li>Use the arrow keys to move each character from left to right.</li>
+            <li>Use the spacebar to jump over obstacles.</li>
         </ul>
     </section>
 
@@ -129,32 +143,23 @@
             <option value="">-- Choose a Character --</option>
             <!-- Character options will be added here -->
         </select>
-        <button id="challenge-button" onclick="attemptChallenge()">Attempt Challenge</button>
-        <div id="challenge-details"></div>
+        <button id="challenge-button" onclick="attemptChallenge()">Accept Challenge</button>
+    </div>
+
+    <div id="game-screen">
+        <h2>Your Challenge Awaits!</h2>
+        <p id="game-challenge-details"></p>
+        <div id="game-area"></div>
     </div>
 
     <script>
-        // Define characters with updated image URLs
         const characters = [
-            {
-                name: "Fireboy",
-                image: "static/images/Fireboy.webp"  // Fireboy image URL
-            },
-            {
-                name: "Watergirl",
-                image: "static/images/Watergirl.webp"  // Watergirl image URL
-            },
-            {
-                name: "Aquaman",
-                image: "static/images/Aquaman.png"  // Aquaman image URL
-            },
-            {
-                name: "Lavawoman",
-                image: "static/images/lava woman.png"  // Lavawoman image URL
-            }
+            { name: "Fireboy", image: "static/images/Fireboy.webp" },
+            { name: "Watergirl", image: "static/images/Watergirl.webp" },
+            { name: "Aquaman", image: "static/images/Aquaman.png" },
+            { name: "Lavawoman", image: "static/images/lava woman.png" }
         ];
 
-        // Define challenges
         const challenges = [
             {
                 name: "Narrow Lava Bridge",
@@ -176,12 +181,14 @@
             }
         ];
 
+        let selectedCharacterImage = "";
+        let characterElement;
+
         function loadCharacters() {
             const container = document.getElementById('character-container');
             const dropdown = document.getElementById('character-select');
 
             characters.forEach(character => {
-                // Add character to the container
                 const characterDiv = document.createElement('div');
                 characterDiv.classList.add('character');
 
@@ -196,37 +203,67 @@
                 characterDiv.appendChild(name);
                 container.appendChild(characterDiv);
 
-                // Add character to the dropdown
                 const option = document.createElement('option');
                 option.value = character.name;
+                option.dataset.image = character.image;
                 option.textContent = character.name;
                 dropdown.appendChild(option);
             });
         }
 
         function attemptChallenge() {
-            const selectedCharacter = document.getElementById('character-select').value;
-            const challengeDetails = document.getElementById('challenge-details');
+            const dropdown = document.getElementById('character-select');
+            const selectedOption = dropdown.options[dropdown.selectedIndex];
 
-            if (!selectedCharacter) {
-                challengeDetails.textContent = "Please select a character to view their challenge.";
+            if (!selectedOption.value) {
+                alert("Please select a character to begin the challenge.");
                 return;
             }
 
-            // Assign a random challenge for simplicity
+            selectedCharacterImage = selectedOption.dataset.image;
+
             const challenge = challenges[Math.floor(Math.random() * challenges.length)];
 
-            // Display the challenge
-            challengeDetails.innerHTML = `
+            document.getElementById('game-description').style.display = 'none';
+            document.getElementById('character-container').style.display = 'none';
+            document.getElementById('challenge-container').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+
+            document.getElementById('game-challenge-details').innerHTML = `
                 <h3>${challenge.name}</h3>
                 <p><strong>Primary Attribute:</strong> ${challenge.primaryAttribute}</p>
                 <p><strong>Secondary Attribute:</strong> ${challenge.secondaryAttribute}</p>
                 <p>${challenge.description}</p>
             `;
+
+            const gameArea = document.getElementById('game-area');
+            characterElement = document.createElement('div');
+            characterElement.classList.add('chosen-character');
+            characterElement.style.backgroundImage = `url('${selectedCharacterImage}')`;
+            gameArea.appendChild(characterElement);
         }
 
-        // Load characters on page load
+        document.addEventListener("keydown", (e) => {
+            const step = 10;
+
+            let left = parseInt(characterElement.style.left || 0);
+            let bottom = parseInt(characterElement.style.bottom || 20);
+
+            if (e.key === "ArrowRight") left += step;
+            if (e.key === "ArrowLeft") left -= step;
+            if (e.key === " ") bottom += 50; // Space bar to jump
+
+            characterElement.style.left = `${left}px`;
+            characterElement.style.bottom = `${bottom}px`;
+
+            if (e.key === " ") {
+                setTimeout(() => (characterElement.style.bottom = "20px"), 300); // Reset jump after 300ms
+            }
+        });
+
         loadCharacters();
     </script>
 </body>
 </html>
+
+
