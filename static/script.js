@@ -93,3 +93,7 @@ function loadMockCharacters() {
 
 // Initialize the game
 loadMoc
+
+
+
+
