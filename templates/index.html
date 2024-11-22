@@ -101,12 +101,42 @@
 
         .chosen-character {
             position: absolute;
-            bottom: 20px;
+            bottom: 50px;
             left: 20px;
             width: 50px;
             height: 50px;
             background-size: cover;
             background-position: center;
+        }
+
+        .obstacle {
+            position: absolute;
+            width: 50px;
+            height: 20px;
+            bottom: 50px;
+        }
+
+        .water {
+            background-color: blue;
+        }
+
+        .lava {
+            background-color: red;
+        }
+
+        #retry-button {
+            display: none;
+            padding: 10px 20px;
+            background-color: #ff4500;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #retry-button:hover {
+            background-color: #ff6347;
         }
     </style>
 </head>
@@ -152,6 +182,8 @@
         <div id="game-area"></div>
     </div>
 
+    <button id="retry-button" onclick="retryGame()">Retry</button>
+
     <script>
         const characters = [
             { name: "Fireboy", image: "static/images/Fireboy.webp" },
@@ -160,29 +192,13 @@
             { name: "Lavawoman", image: "static/images/lava woman.png" }
         ];
 
-        const challenges = [
-            {
-                name: "Narrow Lava Bridge",
-                primaryAttribute: "Agility",
-                secondaryAttribute: "Teamwork",
-                description: "Cross the narrow bridge over molten lava by using perfect timing and coordination."
-            },
-            {
-                name: "Chamber of Glimmering Ice",
-                primaryAttribute: "Intelligence",
-                secondaryAttribute: "Creativity",
-                description: "Navigate through a frozen chamber, solving puzzles to reveal the exit."
-            },
-            {
-                name: "Raging River Rapids",
-                primaryAttribute: "Strength",
-                secondaryAttribute: "Agility",
-                description: "Conquer a rushing river filled with obstacles by using your strength and quick reflexes."
-            }
-        ];
-
         let selectedCharacterImage = "";
         let characterElement;
+        let obstacles = [];
+        let obstacleSpeed = 5; // Initial speed for obstacles
+        let gameInterval;
+        let speedIncreaseInterval;
+        let character;
 
         function loadCharacters() {
             const container = document.getElementById('character-container');
@@ -191,14 +207,11 @@
             characters.forEach(character => {
                 const characterDiv = document.createElement('div');
                 characterDiv.classList.add('character');
-
                 const img = document.createElement('img');
                 img.src = character.image;
                 img.alt = character.name;
-
                 const name = document.createElement('h3');
                 name.textContent = character.name;
-
                 characterDiv.appendChild(img);
                 characterDiv.appendChild(name);
                 container.appendChild(characterDiv);
@@ -221,33 +234,99 @@
             }
 
             selectedCharacterImage = selectedOption.dataset.image;
+            character = selectedOption.value;
 
-            const challenge = challenges[Math.floor(Math.random() * challenges.length)];
-
+            // Hide UI elements when game starts
             document.getElementById('game-description').style.display = 'none';
             document.getElementById('character-container').style.display = 'none';
             document.getElementById('challenge-container').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
-
-            document.getElementById('game-challenge-details').innerHTML = `
-                <h3>${challenge.name}</h3>
-                <p><strong>Primary Attribute:</strong> ${challenge.primaryAttribute}</p>
-                <p><strong>Secondary Attribute:</strong> ${challenge.secondaryAttribute}</p>
-                <p>${challenge.description}</p>
-            `;
 
             const gameArea = document.getElementById('game-area');
             characterElement = document.createElement('div');
             characterElement.classList.add('chosen-character');
             characterElement.style.backgroundImage = `url('${selectedCharacterImage}')`;
             gameArea.appendChild(characterElement);
+
+            spawnObstacles(); // Start spawning obstacles
+            increaseSpeed();  // Increase speed of obstacles over time
+            moveObstacles();  // Start moving obstacles
+        }
+
+        function spawnObstacles() {
+            gameInterval = setInterval(() => {
+                const gameArea = document.getElementById('game-area');
+                const obstacle = document.createElement('div');
+                obstacle.classList.add('obstacle');
+                obstacle.classList.add(character === "Fireboy" ? 'water' : 'lava');
+                const leftPosition = gameArea.offsetWidth;
+                obstacle.style.left = `${leftPosition}px`;
+                gameArea.appendChild(obstacle);
+                obstacles.push(obstacle);
+            }, 2000); // Spawn obstacles every 2 seconds
+        }
+
+        function moveObstacles() {
+            setInterval(() => {
+                obstacles.forEach((obstacle, index) => {
+                    let position = parseInt(obstacle.style.left);
+                    if (position <= -50) {
+                        obstacle.remove();
+                        obstacles.splice(index, 1);
+                    } else {
+                        obstacle.style.left = `${position - obstacleSpeed}px`;
+                        checkCollision(obstacle);
+                    }
+                });
+            }, 20);
+        }
+
+        function checkCollision(obstacle) {
+            const characterRect = characterElement.getBoundingClientRect();
+            const obstacleRect = obstacle.getBoundingClientRect();
+            if (
+                characterRect.left < obstacleRect.right &&
+                characterRect.right > obstacleRect.left &&
+                characterRect.top < obstacleRect.bottom &&
+                characterRect.bottom > obstacleRect.top
+            ) {
+                gameOver();
+            }
+        }
+
+        function increaseSpeed() {
+            speedIncreaseInterval = setInterval(() => {
+                obstacleSpeed += 0.1; // Gradually increase obstacle speed
+            }, 5000); // Increase speed every 5 seconds
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval); // Stop spawning obstacles
+            clearInterval(speedIncreaseInterval); // Stop increasing speed
+            document.getElementById('retry-button').style.display = 'block'; // Show retry button
+        }
+
+        function retryGame() {
+            // Reset everything for retrying the game
+            obstacles.forEach(obstacle => obstacle.remove()); // Remove all obstacles
+            obstacles = []; // Clear obstacles array
+            obstacleSpeed = 5; // Reset obstacle speed
+            document.getElementById('retry-button').style.display = 'none'; // Hide retry button
+
+            // Reset game screen UI
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('game-description').style.display = 'block';
+            document.getElementById('character-container').style.display = 'block';
+            document.getElementById('challenge-container').style.display = 'block';
+
+            // Restart the game with the same character
+            attemptChallenge();
         }
 
         document.addEventListener("keydown", (e) => {
             const step = 10;
-
             let left = parseInt(characterElement.style.left || 0);
-            let bottom = parseInt(characterElement.style.bottom || 20);
+            let bottom = parseInt(characterElement.style.bottom || 50);
 
             if (e.key === "ArrowRight") left += step;
             if (e.key === "ArrowLeft") left -= step;
@@ -257,14 +336,31 @@
             characterElement.style.bottom = `${bottom}px`;
 
             if (e.key === " ") {
-                setTimeout(() => (characterElement.style.bottom = "20px"), 300); // Reset jump after 300ms
+                setTimeout(() => (characterElement.style.bottom = "50px"), 300); // Reset jump after 300ms
             }
         });
 
-        loadCharacters();
+        window.onload = loadCharacters;
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
