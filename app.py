@@ -8,7 +8,7 @@ CORS(app)  # Enable CORS for all routes
 characters = [
         {
             "name": "Fireboy",
-            "image": "/static/images/fireboy.png",  # Updated path
+            "image":  "/static/images/fireboy.png",  # Updated path
             "attributes": {
                 "Strength": 12,
                 "Agility": 8,
