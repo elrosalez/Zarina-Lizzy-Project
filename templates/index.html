@@ -278,24 +278,38 @@
 
 
         function spawnObstacles() {
+            let isWater = true; // Start with water obstacle
             gameInterval = setInterval(() => {
                 const gameArea = document.getElementById('game-area');
                 const obstacle = document.createElement('div');
                 obstacle.classList.add('obstacle');
-                obstacle.classList.add(character === "Fireboy" ? 'water' : 'lava');
 
-                // Set the obstacle's position and randomize its width
+                // Alternate between water and fire obstacles
+                if (isWater) {
+                    obstacle.style.backgroundImage = "url('/static/images/water.jpeg')"; // Updated to water.jpeg
+                    obstacle.dataset.type = "water"; // Set a custom type attribute
+                } else {
+                    obstacle.style.backgroundImage = "url('/static/images/fire.png')";
+                    obstacle.dataset.type = "fire"; // Set a custom type attribute
+                }
+                isWater = !isWater; // Toggle obstacle type for the next spawn
+
+                obstacle.style.width = "50px";
+                obstacle.style.height = "50px";
+                obstacle.style.backgroundSize = "cover";
+                obstacle.style.backgroundRepeat = "no-repeat";
+                obstacle.style.backgroundPosition = "center";
+
+                // Set the obstacle's initial position
                 const leftPosition = gameArea.offsetWidth;
                 obstacle.style.left = `${leftPosition}px`;
-
-                // Randomize obstacle width
-                const obstacleWidth = Math.floor(Math.random() * 20) + 30; // Width between 30px and 50px
-                obstacle.style.width = `${obstacleWidth}px`;
+                obstacle.style.bottom = "50px"; // Keep it at ground level
 
                 gameArea.appendChild(obstacle);
                 obstacles.push(obstacle);
             }, 2000); // Spawn obstacles every 2 seconds
         }
+
 
 
         function moveObstacles() {
@@ -316,15 +330,31 @@
         function checkCollision(obstacle) {
             const characterRect = characterElement.getBoundingClientRect();
             const obstacleRect = obstacle.getBoundingClientRect();
+
+            // Check if there is an overlap between character and obstacle
             if (
                 characterRect.left < obstacleRect.right &&
                 characterRect.right > obstacleRect.left &&
                 characterRect.top < obstacleRect.bottom &&
                 characterRect.bottom > obstacleRect.top
             ) {
-                gameOver();
+                const obstacleType = obstacle.dataset.type; // Get the obstacle type (water or fire)
+
+                // Allow certain characters to pass through based on obstacle type
+                if (
+                    (obstacleType === "water" && (character === "Aquaman" || character === "Watergirl")) ||
+                    (obstacleType === "fire" && (character === "Fireboy" || character === "Lavawoman"))
+                ) {
+                    // Allow character to pass; remove the obstacle
+                    obstacle.remove();
+                    obstacles.splice(obstacles.indexOf(obstacle), 1);
+                } else {
+                    // Game over for other characters
+                    gameOver();
+                }
             }
         }
+
 
         function increaseSpeed() {
             speedIncreaseInterval = setInterval(() => {
@@ -491,6 +521,7 @@
             characterElement = null;
         }
 
+       
         window.onload = loadCharacters;
     </script>
 </body>
