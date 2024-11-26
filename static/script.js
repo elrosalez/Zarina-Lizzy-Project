@@ -31,7 +31,7 @@ function displayCharacters(characters) {
         container.appendChild(characterDiv);
     });
 }
-
+ 
 // Function to handle character selection
 function selectCharacter(characterName) {
     selectedCharacter = characterName;
