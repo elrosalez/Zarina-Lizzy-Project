@@ -406,8 +406,9 @@
             diamondSpawnInterval = setInterval(() => {
                 const diamond = document.createElement('div');
                 diamond.classList.add('diamond');
-                diamond.style.width = "30px";
-                diamond.style.height = "75px";
+                diamond.style.backgroundImage = "url('/static/images/diamond.png')";
+                diamond.style.width = "50px";
+                diamond.style.height = "30px";
                 diamond.style.position = "absolute";
 
                 // Randomize diamond position
@@ -421,7 +422,7 @@
 
                 gameArea.appendChild(diamond);
                 diamonds.push(diamond);
-            }, 5000); // Spawn a diamond every 5 seconds
+            }, 10000); // Spawn a diamond every 10 seconds
         }
 
         function moveDiamonds() {

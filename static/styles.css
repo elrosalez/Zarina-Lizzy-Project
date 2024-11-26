@@ -252,16 +252,17 @@ button:hover {
 
 .diamond {
     position: absolute;
-    background-size: cover;
     background-image: url('/static/images/Diamond.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    background-size: contain; /* Ensures the whole image fits inside the element */
+    background-repeat: no-repeat; /* Prevents tiling */
+    background-position: center; /* Centers the image within the element */
+    width: 50px; /* Adjust width */
+    height: 50px; /* Adjust height */
+    border-radius: 50%; /* Optional: For circular appearance */
     z-index: 10;
-    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.8); /* Glowing effect */
+    box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.8); /* Optional glowing effect */
 }
+
 
 
 #character-container {
