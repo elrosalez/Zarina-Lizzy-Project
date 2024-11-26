@@ -370,19 +370,28 @@
 
             
         document.addEventListener("keydown", (e) => {
-            const step = 10;
+            const step = 10; // Horizontal movement step
+            const jumpHeight = 75; // Height of the jump
+            const jumpDuration = 500; // Duration the jump lasts in milliseconds
+
+            // Current position of the character
             let left = parseInt(characterElement.style.left || 0);
             let bottom = parseInt(characterElement.style.bottom || 50);
 
-            if (e.key === "ArrowRight") left += step;
-            if (e.key === "ArrowLeft") left -= step;
-            if (e.key === " ") bottom += 50; // Space bar to jump
+            // Handle keypress actions
+            if (e.key === "ArrowRight") left += step; // Move right
+            if (e.key === "ArrowLeft") left -= step;  // Move left
+            if (e.key === " ") bottom += jumpHeight;  // Jump
 
+            // Apply the new position
             characterElement.style.left = `${left}px`;
             characterElement.style.bottom = `${bottom}px`;
 
+            // Reset jump after the jumpDuration
             if (e.key === " ") {
-                setTimeout(() => (characterElement.style.bottom = "50px"), 300); // Reset jump after 300ms
+                setTimeout(() => {
+                    characterElement.style.bottom = "50px"; // Reset to ground level
+                }, jumpDuration);
             }
         });
 
@@ -398,7 +407,7 @@
                 const diamond = document.createElement('div');
                 diamond.classList.add('diamond');
                 diamond.style.width = "30px";
-                diamond.style.height = "30px";
+                diamond.style.height = "75px";
                 diamond.style.position = "absolute";
 
                 // Randomize diamond position
