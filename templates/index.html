@@ -535,4 +535,147 @@
     </script>
 </body>
 </html>
+<script>
+    let highScore = 0; // Store high score
+    let currentScore = 0; // Track current score in a session
+
+    function updateScore() {
+        // Update the high score if the current score is higher
+        if (currentScore > highScore) {
+            highScore = currentScore;
+        }
+
+        // Display both current and high scores
+        const scoreDisplay = document.getElementById('score-display');
+        scoreDisplay.textContent = `Score: ${currentScore} | High Score: ${highScore}`;
+    }
+
+    function collectDiamond(diamond) {
+        // Remove the diamond from the game area
+        diamond.remove();
+
+        // Increase the current score
+        currentScore++;
+
+        // Increase the character size
+        const currentWidth = parseInt(characterElement.style.width || 50);
+        const currentHeight = parseInt(characterElement.style.height || 50);
+
+        characterElement.style.width = `${currentWidth + 10}px`;
+        characterElement.style.height = `${currentHeight + 10}px`;
+
+        // Update the score after collecting a diamond
+        updateScore();
+    }
+
+    function attemptChallenge() {
+        const dropdown = document.getElementById('character-select');
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        if (!selectedOption.value) {
+            alert("Please select a character to begin the challenge.");
+            return;
+        }
+
+        selectedCharacterImage = selectedOption.dataset.image;
+        character = selectedOption.value;
+
+        // Hide UI elements when game starts
+        document.getElementById('game-description').style.display = 'none';
+        document.getElementById('character-container').style.display = 'none';
+        document.getElementById('challenge-container').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
+
+        const gameArea = document.getElementById('game-area');
+
+        // Clear any existing character element
+        if (characterElement) {
+            gameArea.removeChild(characterElement);
+        }
+
+        // Create a new character element
+        characterElement = document.createElement('div');
+        characterElement.classList.add('chosen-character');
+        characterElement.style.backgroundImage = `url('${selectedCharacterImage}')`;
+        characterElement.style.width = "50px"; // Initial size
+        characterElement.style.height = "50px";
+        gameArea.appendChild(characterElement);
+
+        // Reset the current score when a new challenge begins
+        currentScore = 0;
+
+        spawnObstacles(); // Start spawning obstacles
+        increaseSpeed();  // Increase speed of obstacles over time
+        moveObstacles();  // Start moving obstacles
+        spawnDiamonds();  // Start spawning diamonds
+        moveDiamonds();   // Start checking diamond collisions
+
+        // Update the score display when game starts
+        updateScore();
+    }
+
+    // Display the current and high score on the game screen
+    function createScoreDisplay() {
+        const scoreContainer = document.createElement('div');
+        scoreContainer.id = 'score-display';
+        scoreContainer.style.position = 'absolute';
+        scoreContainer.style.top = '10px';
+        scoreContainer.style.right = '10px';
+        scoreContainer.style.fontSize = '20px';
+        scoreContainer.style.color = 'white';
+        scoreContainer.style.fontWeight = 'bold';
+
+        // Set initial score text
+        scoreContainer.textContent = `Score: 0 | High Score: ${highScore}`;
+
+        // Append the score display to the game area
+        const gameArea = document.getElementById('game-area');
+        gameArea.appendChild(scoreContainer);
+    }
+
+    // Add score display when the game starts
+    function retryGame() {
+        // Stop all intervals
+        clearInterval(gameInterval);
+        clearInterval(speedIncreaseInterval);
+        clearInterval(diamondSpawnInterval);
+
+        // Remove all obstacles and diamonds
+        obstacles.forEach(obstacle => obstacle.remove());
+        obstacles = [];
+        diamonds.forEach(diamond => diamond.remove());
+        diamonds = [];
+
+        // Reset obstacle speed
+        obstacleSpeed = 5;
+
+        // Reset UI elements
+        document.getElementById('retry-button').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('game-description').style.display = 'block';
+        document.getElementById('character-container').style.display = 'flex';
+        document.getElementById('challenge-container').style.display = 'block';
+
+        // Clear game area
+        const gameArea = document.getElementById('game-area');
+        gameArea.innerHTML = ''; // Remove all game elements
+
+        // Reset character container and size
+        const container = document.getElementById('character-container');
+        container.innerHTML = ''; // Clear characters
+        loadCharacters(); // Reload the characters with their original styles
+
+        // Reset characterElement reference
+        characterElement = null;
+
+        // Reset the score display
+        createScoreDisplay();
+    }
+
+    window.onload = () => {
+        loadCharacters();
+        createScoreDisplay(); // Add the score display to the game area when the page loads
+    }
+</script>
+
 
